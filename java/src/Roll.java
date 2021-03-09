@@ -25,7 +25,7 @@ public class Roll {
         System.out.print(var) ;
     }
     public Roll(String formula) {
-        Pattern pattern = Pattern.compile("(\\d)*[d](\\d)+(.)*") ;
+        Pattern pattern = Pattern.compile("(\\d)*[d](\\d)+(([+-])(\\d)+)*") ;
         Matcher matcher = pattern.matcher(formula) ;
         this.valid = matcher.find() ;
 
@@ -34,15 +34,19 @@ public class Roll {
             this.valid = false ;
 
         this.diceValue = matcher.group(2) == null ? 0 : Integer.parseInt(matcher.group(2)) ;
+        System.out.print(matcher.group(2)) ;
         if (this.diceValue <= 0)
             this.valid = false ;
 
         if (matcher.group(3) != null) {
-            boolean m = Pattern.matches("([+-])(\\d)+", matcher.group(3));
-            if (m == false)
+            this.modifier = matcher.group(3) == null ? 0 : Integer.parseInt(matcher.group(3));
+            /*Pattern p = Pattern.compile("([+-])(\\d)+") ;
+            Matcher m = p.matcher(matcher.group(3)) ;
+            //boolean m = Pattern.find("([+-])(\\d)+", matcher.group(3));
+            if (m.find())
                 this.valid = false;
             else
-                this.modifier = matcher.group(3) == null ? 0 : Integer.parseInt(matcher.group(3));
+                this.modifier = matcher.group(3) == null ? 0 : Integer.parseInt(matcher.group(3));*/
         }
     }
 
@@ -84,8 +88,6 @@ public class Roll {
             }
             this.value += tmp ;
         }
-        this.print(this.value) ;
-        this.print(this.modifier) ;
         this.value += modifier ;
 
         if (this.value < 0)
