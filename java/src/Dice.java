@@ -10,7 +10,8 @@ public class Dice {
     }
 
     public int rollDice() {
-        return RNG.random(value);
+        //return RNG.random(value);
+        return 4 ;
     }
 
     public int getValue() {
