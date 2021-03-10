@@ -25,28 +25,33 @@ public class Roll {
         System.out.print(var) ;
     }
     public Roll(String formula) {
-        Pattern pattern = Pattern.compile("(\\d)*[d](\\d)+(([+-])(\\d)+)*") ;
+        Pattern pattern = Pattern.compile("(\\d)*[d]((\\p{Punct})?(\\d)+)((\\p{Punct})(\\d)+)*") ;
         Matcher matcher = pattern.matcher(formula) ;
-        this.valid = matcher.find() ;
+        this.valid = matcher.matches() ;
 
-        this.nbRoll = matcher.group(1) == null ? 1 : Integer.parseInt(matcher.group(1)) ;
-        if (this.nbRoll <= 0)
-            this.valid = false ;
+        if (this.valid == true) {
+            if (matcher.group(1) == null) {
+                if (formula.charAt(0) == 'd')
+                    this.nbRoll = 1;
+                else
+                    this.valid = false;
+            } else
+                this.nbRoll = Integer.parseInt(matcher.group(1));
 
-        this.diceValue = matcher.group(2) == null ? 0 : Integer.parseInt(matcher.group(2)) ;
-        System.out.print(matcher.group(2)) ;
-        if (this.diceValue <= 0)
-            this.valid = false ;
-
-        if (matcher.group(3) != null) {
-            this.modifier = matcher.group(3) == null ? 0 : Integer.parseInt(matcher.group(3));
-            /*Pattern p = Pattern.compile("([+-])(\\d)+") ;
-            Matcher m = p.matcher(matcher.group(3)) ;
-            //boolean m = Pattern.find("([+-])(\\d)+", matcher.group(3));
-            if (m.find())
+            if (this.nbRoll <= 0)
                 this.valid = false;
-            else
-                this.modifier = matcher.group(3) == null ? 0 : Integer.parseInt(matcher.group(3));*/
+
+            this.diceValue = matcher.group(2) == null ? 0 : Integer.parseInt(matcher.group(2));
+            if (this.diceValue <= 0)
+                this.valid = false;
+
+            if (matcher.group(5) != null) {
+                if (matcher.group(6) != null && Pattern.matches("[+-]", matcher.group(6))) {
+                    this.modifier = matcher.group(5) == null ? 0 : Integer.parseInt(matcher.group(5));
+                } else {
+                    this.valid = false;
+                }
+            }
         }
     }
 

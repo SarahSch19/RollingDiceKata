@@ -140,4 +140,10 @@ public class RollTest {
         Roll rollTest = new Roll("fhfxhfch64gxf4dg6d4g");
         Assert.assertEquals(-1, rollTest.makeRoll(Roll.RollType.NORMAL));
     }
+
+    @Test
+    public void toto() {
+        Roll rollTest = new Roll("toto");
+        Assert.assertEquals(-1, rollTest.makeRoll(Roll.RollType.NORMAL));
+    }
 }
