@@ -24,12 +24,16 @@ public class Roll {
     public void print (int var) {
         System.out.print(var) ;
     }
+
+    /*
+     * Constructor for a roll with a formula
+     */
     public Roll(String formula) {
-        Pattern pattern = Pattern.compile("(\\d)*[d]((\\p{Punct})?(\\d)+)((\\p{Punct})(\\d)+)*") ;
+        Pattern pattern = Pattern.compile("(\\d)*[d]((\\p{Punct})?(\\d)+)((\\p{Punct})(\\d)+)*") ; //Regex pattern to match the expected formula
         Matcher matcher = pattern.matcher(formula) ;
         this.valid = matcher.matches() ;
 
-        if (this.valid == true) {
+        if (this.valid == true) { //checks if the formula matches the pattern
             if (matcher.group(1) == null) {
                 if (formula.charAt(0) == 'd')
                     this.nbRoll = 1;
@@ -45,8 +49,8 @@ public class Roll {
             if (this.diceValue <= 0)
                 this.valid = false;
 
-            if (matcher.group(5) != null) {
-                if (matcher.group(6) != null && Pattern.matches("[+-]", matcher.group(6))) {
+            if (matcher.group(5) != null) { //case of a formula with a modifier
+                if (matcher.group(6) != null && Pattern.matches("[+-]", matcher.group(6))) { //Regex pattern to check the sign of the modifier
                     this.modifier = matcher.group(5) == null ? 0 : Integer.parseInt(matcher.group(5));
                 } else {
                     this.valid = false;
@@ -55,6 +59,9 @@ public class Roll {
         }
     }
 
+    /*
+     * Constructor for a roll with given variables
+     */
     public Roll(int diceValue, int nbRoll, int modifier) {
         if (diceValue <= 0)
             this.valid = false ;
@@ -68,6 +75,9 @@ public class Roll {
         this.results = new int[2] ;
     }
 
+    /*
+     * Method for computing the roll output
+     */
     public int makeRoll(RollType rollType) {
         Dice d = new Dice(this.diceValue) ;
         int tmp = 0 ;
@@ -101,12 +111,19 @@ public class Roll {
         return this.value;
     }
 
+    /*
+     * Method for launching two rolls of the dice
+     * Stores the each roll in the array: this.results
+     */
     public void getResults (Dice d) {
         for (int i = 0 ; i < 2 ; ++i) {
             this.results[i] = d.rollDice() ;
         }
     }
 
+    /*
+     * Method for selecting the maximal value from the two rolls
+     */
     private int getMax () {
         int max = -1 ;
         for (int i = 0 ; i < 2 ; ++i) {
@@ -116,6 +133,9 @@ public class Roll {
         return max ;
     }
 
+    /*
+     * Method for selecting the minimal value from the two rolls
+     */
     private int getMin () {
         int min = 100 ;
         for (int i = 0 ; i < 2 ; ++i) {
